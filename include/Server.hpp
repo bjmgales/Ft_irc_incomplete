@@ -36,7 +36,7 @@ private:
 	struct sockaddr_in _info;
 	socklen_t _addrSize;
 	std::list<Client> _users;
-	std::list<Client> _waitUsers;
+	std::list<Client *> _waitUsers;
 	std::list<Channel> _channels;
 
 public:
@@ -176,9 +176,9 @@ public:
 				_maxfd = (*it).getSock();
 			it++;
 		}
-		for (std::list<Client>::iterator it = _waitUsers.begin(); it != _waitUsers.end();){
-			if ((*it).getSock() > 3){
-				FD_SET((*it).getSock(), &_writefds);
+		for (std::list<Client *>::iterator it = _waitUsers.begin(); it != _waitUsers.end();){
+			if ((*it)->getSock() > 3){
+				FD_SET((*it)->getSock(), &_writefds);
 			}
 			it++;
 		}
@@ -341,7 +341,8 @@ public:
 	void setRPL(std::string RPL, std::string str);
 	void joinMsg(Channel chan);
 	void setChanRPL(std::string str, Channel chan);
-
+	void chanNameUpdate(Channel *chan);
+	void chanMsg(std::string request);
 };
 
 
