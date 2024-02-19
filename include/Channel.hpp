@@ -17,86 +17,44 @@ class Server;
 
 class Channel
 {
-private:
-	Server				*_serv;
-	std::string 		_name;
-	std::string 		_topic;
-	std::list<Client *> 	_users;
-	std::list<Client *> 	_operators;
-	char 				_mode;
-	std::string			_password;
-	std::list<Client *> 	_invited;
-	std::list<Client *>	_banned;
-	std::vector<std::string> _msgHistory;
-
-
-
 public:
-	/***************Constructors/Destructor********************/
 
-	Channel(std::string name, Server *serv, Client *user):_name(name), _serv(serv){
-		_operators.push_back(user);
-	};
+	Channel(std::string name, Server *serv, Client *user);
+    Channel(const Channel &other);
+    Channel &operator=(const Channel &other);
+    ~Channel();
 
-	Channel(const Channel & other){
-		_name = other._name;
-		_topic = other._topic;
-		_users = other._users;
-		_operators = other._operators;
-		_mode = other._mode;
-		_password = other._password;
-		_invited = other._invited;
-		_banned = other._banned;
-		_msgHistory = other._msgHistory;
-		_serv = other._serv;
-	};
+    std::string getName();
 
-	Channel & operator = (const Channel & other){
-		if (this != &other){
-			_name = other._name;
-			_topic = other._topic;
-			_users = other._users;
-			_operators = other._operators;
-			_mode = other._mode;
-			_password = other._password;
-			_invited = other._invited;
-			_banned = other._banned;
-			_msgHistory = other._msgHistory;
-			_serv = other._serv;
-		}
-		return (*this);
-	};
+    void setTopic(std::string topic);
+    std::string getTopic();
 
-	~Channel(){};
-	/**********************************************************/
+	void addOperator(Client *user);
+    std::list<Client *> getOperators();
 
-	void removeUser(Client *elem){
-		for (std::list<Client *>::iterator it = _users.begin(); it != _users.end(); it++){
-			if (*it == elem){
-				_users.erase(it);
-				return;
-			}
-		}
-	}
-	/***********************Set/Get****************************/
+    void addUsr(Client *user);
+    std::list<Client *> getUsers();
 
-	std::string getName(){return _name;};
-	void	addUsr(Client *user){
-		_users.push_back(user);
-	}
-	void setTopic(std::string topic){_topic = topic;};
-	std::string getTopic(){
-		if (_topic.empty())
-			_topic = "undefined";
-		return _topic;
-	}
-	std::list<Client *> getOperators(){
-		return _operators;
-	}
+    void addMsgHistory(std::string msg);
+    std::vector<std::string> getMsgHistory();
 
-	std::list<Client *> getUsers(){
-		return _users;
-	}
+    void removeUser(Client *elem);
+
+private:
+    Server *_serv;
+
+	std::string _name;
+    std::string _topic;
+    std::string _password;
+    char		_mode;
+
+	std::list<Client *> _users;
+    std::list<Client *> _operators;
+
+    std::list<Client *> _invited;
+    std::list<Client *> _banned;
+
+    std::vector<std::string> _msgHistory;
 };
 
 

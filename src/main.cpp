@@ -1,6 +1,7 @@
 #include "Server.hpp"
 #include <errno.h>
 #include <string.h>
+
 int main(int argc, char **argv){
 	Server serv(std::stoi(argv[1]), argv[2]);
 

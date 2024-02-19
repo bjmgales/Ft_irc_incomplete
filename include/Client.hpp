@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 15:22:35 by bgales            #+#    #+#             */
-/*   Updated: 2024/02/18 20:28:37 by bgales           ###   ########.fr       */
+/*   Updated: 2024/02/19 20:57:54 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,86 +38,38 @@ private:
 
 public:
 
-	/***************Constructors/Destructor********************/
+/***************Constructors/Destructor********************/
 
-	Client(){setAddrSize(sizeof(_info));};
+Client();
+Client(const Client &other);
+Client &operator =(const Client &other);
+~Client();
 
-	Client(const Client &other):_sockFD(other._sockFD),
-		_info(other._info), _addrSize(other._addrSize){};
+/***************Set/Get********************/
 
-	Client & operator =(const Client &other){
-		if (this != &other){
-			_addrSize = other._addrSize;
-			_sockFD = other._sockFD;
-			_info = other._info;
-		}
-		return (*this);
-	};
+void setSock(int fd);
+int getSock();
 
-	~Client(){};
+void setAddrSize(unsigned int size);
+socklen_t *getAddrSize();
+struct sockaddr *getInfo();
 
-	/***********************************************************/
+void setPass(bool pass);
+bool isPass();
 
-	/************************Functions*************************/
+void setUsername(std::string name);
+std::string getUsername();
 
-	void setSock(int fd){
-		int flags;
-		_sockFD = fd;
-		flags = fcntl(_sockFD, F_GETFL, 0);
-		flags |= O_NONBLOCK;
-		fcntl(_sockFD, F_SETFL, flags);
+void setNickname(std::string name);
+std::string getNickname();
 
-	};
+void setSigned(bool i);
+bool getSigned();
 
-	void setAddrSize(unsigned int size){
-		_addrSize = size;
-	};
-
-	socklen_t *getAddrSize(){
-		return &_addrSize;
-	};
-
-	bool isPass(){
-		if (_isPass)
-			return true;
-		return false;
-	};
-	void setPass(bool pass){_isPass = pass;}
-
-	std::string getUsername(){
-		if (_username.empty())
-			return ("");
-		return _username;
-		};
-	void		setUsername(std::string name){_username = name;};
-	std::string getNickname(){
-		if (_nickname.empty())
-			return ("");
-		return _nickname;
-	};
-	void		setNickname(std::string name){_nickname = name;};
-
-	int getSock(){
-		return _sockFD;
-	};
-
-	struct sockaddr *getInfo(){
-		return (struct sockaddr *)&_info;
-	};
-	void setSigned(bool i){
-		_signedUser = i;
-	}
-	bool getSigned(){
-		return _signedUser;
-	}
-	void setServRep(std::string rep){
-		_servReply.push_back(rep);
-	};
-	std::vector<std::string> getServRep(){return _servReply;};
-	void clearServRep(){
-		_servReply.clear();
-	}
-	/***********************************************************/
-
+//prepare what will be send() to server
+void setServRep(std::string rep);
+void setVectorRep(std::vector<std::string> rep);
+std::vector<std::string> getServRep();
+void clearServRep();
 };
 
