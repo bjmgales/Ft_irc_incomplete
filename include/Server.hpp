@@ -109,6 +109,7 @@ public:
 
 	//utils
 	bool isChanMember(Channel chan);
+	bool isChanOperator(Channel chan);
 
 	//send msg to user or to channel
 	void privMsg(std::string request);

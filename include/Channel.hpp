@@ -38,7 +38,23 @@ public:
     void addMsgHistory(std::string msg);
     std::vector<std::string> getMsgHistory();
 
+    void setPassword(std::string password);
+    void setBoolPassword(bool b){
+        _isPassword = b;
+    }
+    bool getBoolPassword(){
+        return _isPassword;
+    }
+    std::string getPassword();
+
+    void setOpTopic(bool b);
+    bool getOpTopic();
+
+    void setInviteOnly(bool b);
+    bool getInviteOnly();
+
     void removeUser(Client *elem);
+
 
 private:
     Server *_serv;
@@ -46,7 +62,9 @@ private:
 	std::string _name;
     std::string _topic;
     std::string _password;
-    char		_mode;
+    bool        _inviteOnly;
+    bool        _opTopic;
+    bool        _isPassword;
 
 	std::list<Client *> _users;
     std::list<Client *> _operators;

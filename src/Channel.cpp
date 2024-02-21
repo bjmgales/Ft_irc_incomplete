@@ -4,6 +4,9 @@
 
 Channel::Channel(std::string name, Server *serv, Client *user): _name(name), _serv(serv) {
     _operators.push_back(user);
+    _inviteOnly = false;
+    _opTopic = true;
+    _isPassword = false;
 }
 
 Channel::Channel(const Channel & other) {
@@ -11,12 +14,14 @@ Channel::Channel(const Channel & other) {
     _topic = other._topic;
     _users = other._users;
     _operators = other._operators;
-    _mode = other._mode;
     _password = other._password;
     _invited = other._invited;
     _banned = other._banned;
     _msgHistory = other._msgHistory;
     _serv = other._serv;
+    _inviteOnly = other._inviteOnly;
+    _opTopic = other._opTopic;
+    _isPassword = other._isPassword;
 }
 
 Channel& Channel::operator=(const Channel & other) {
@@ -25,12 +30,14 @@ Channel& Channel::operator=(const Channel & other) {
         _topic = other._topic;
         _users = other._users;
         _operators = other._operators;
-        _mode = other._mode;
         _password = other._password;
         _invited = other._invited;
         _banned = other._banned;
         _msgHistory = other._msgHistory;
         _serv = other._serv;
+        _inviteOnly = other._inviteOnly;
+        _opTopic = other._opTopic;
+        _isPassword = other._isPassword;
     }
     return *this;
 }
@@ -49,13 +56,32 @@ void Channel::removeUser(Client *elem) {
 
 /*******************************SET/GET*************************************/
 
-std::string Channel::getName() {
-    return _name;
+void Channel::setPassword(std::string password){
+    _password = password;
 }
 
+std::string Channel::getPassword(){
+    return (_password);
+}
 
-void Channel::setTopic(std::string topic) {
-    _topic = topic;
+void Channel::setInviteOnly(bool b){
+    _inviteOnly = b;
+}
+
+bool Channel::getInviteOnly(){
+    return (_inviteOnly);
+}
+
+void Channel::setOpTopic(bool b){
+    _opTopic = b;
+}
+
+bool Channel::getOpTopic(){
+    return (_opTopic);
+}
+
+std::string Channel::getName() {
+    return (_name);
 }
 
 void Channel::addUsr(Client *user) {
@@ -64,6 +90,10 @@ void Channel::addUsr(Client *user) {
 
 void Channel::addOperator(Client *user){
 	_operators.push_back(user);
+}
+
+void Channel::setTopic(std::string topic) {
+    _topic = topic;
 }
 
 std::string Channel::getTopic() {
