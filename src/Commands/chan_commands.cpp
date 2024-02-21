@@ -36,7 +36,7 @@ void	Server::chanTopic(std::string request){
 	std::string topic = request.substr(request.find(":") + 1);
 	for (std::list<Channel>::iterator it = _channels.begin(); it != _channels.end(); it++){
 		if (dest_chan == (*it).getName()){
-			if (!isChanMember(*it))
+			if (!isChanMember(*it) || ((*it).getOpTopic() && !isChanOperator(*it)))
 				return;
 			std::string str = ":" + getUsr()->getUsername() + \
 				"@127.0.0.1 TOPIC " + dest_chan + ": Channel topic was changed by " + \
@@ -83,7 +83,7 @@ void  Server::kickUsr(std::string request){
 	for (std::list<Channel>::iterator it = _channels.begin(); it != _channels.end(); it++){
 		if ((*it).getName() == chan_name)
 		{
-			if (!isChanMember(*it))
+			if (!isChanMember(*it) || !isChanOperator(*it))
 				return;
 			std::list<Client *> tmp = (*it).getUsers();
 			std::cout << "Users size" << (tmp.size())<< std::endl;
@@ -106,4 +106,30 @@ void  Server::kickUsr(std::string request){
 }
 
 void  Server::inviteUsr(std::string request){
+	std::string to_inv = request.substr(0, request.find(" "));
+	std::string dest_chan = request.substr(request.find(" ") + 1);
+	dest_chan += " ";
+	for (std::list<Channel>::iterator it = _channels.begin(); it != _channels.end(); it++){
+		if ((*it).getName() == dest_chan)
+		{
+			if (!isChanMember(*it) || !isChanOperator(*it))
+				return;
+			for (std::list<Client>::iterator it2 = _users.begin(); it2 != _users.end(); it2++){
+				if ((*it2).getNickname() == to_inv && (*it2).getSock() > 3){
+					std::string str = ":ft_irc.com NOTICE " + to_inv \
+						+ " :You have been invited to " + dest_chan + "by " + getUsr()->getNickname()\
+							 + ". To join, type : /join " + dest_chan +  ".\r\n";
+					(*it2).setServRep(str);
+					if (!isDuplicatePtr(_waitUsers, &(*it2)))
+						_waitUsers.push_back(&(*it2));
+					return;
+				}
+			}
+		}
+	}
+	std::string err = ":ft_irc.com 482 " + getUsr()->getNickname() \
+	+ " " + dest_chan + " :" + to_inv + " : No such user\n\r";
+	getUsr()->setServRep(err);
+	if (!isDuplicatePtr(_waitUsers, getUsr()))
+			_waitUsers.push_back(getUsr());
 }

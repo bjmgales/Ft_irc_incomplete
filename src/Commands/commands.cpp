@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_utils.cpp                                  :+:      :+:    :+:   */
+/*   commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 11:21:03 by bgales            #+#    #+#             */
-/*   Updated: 2024/02/19 21:36:55 by bgales           ###   ########.fr       */
+/*   Updated: 2024/02/21 14:48:59 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,20 @@ bool	Server::isChanMember(Channel chan){
 			!isDuplicatePtr(chan.getUsers(), getUsr())){
 		std::string err = ":ft_irc.com 401 " + getUsr()->getNickname() \
 			+ " " + chan.getName() + ": Join channel first.\r\n";
+		getUsr()->setServRep(err);
+		if (!isDuplicatePtr(_waitUsers, getUsr()))
+			_waitUsers.push_back(getUsr());
+		return (false);
+	}
+	return true;
+}
+
+bool	Server::isChanOperator(Channel chan){
+
+	if (!isDuplicatePtr(chan.getOperators(), getUsr())){
+		std::string err = ":ft_irc.com 401 " + getUsr()->getNickname() \
+			+ " " + chan.getName() + ": Command was not performed." \
+				" You are not a channel operator.\r\n";
 		getUsr()->setServRep(err);
 		if (!isDuplicatePtr(_waitUsers, getUsr()))
 			_waitUsers.push_back(getUsr());
