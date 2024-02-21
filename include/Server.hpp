@@ -94,6 +94,12 @@ public:
 	void kickUsr(std::string request);
 	void inviteUsr(std::string request);
 
+	//channel mode commands
+	void inviteOnlyChan(Channel chan, std::string mode);
+	void topicOperators(Channel chan, std::string mode);
+	void passwordChan(Channel chan, std::string mode);
+	void ChanOperators(Channel chan, std::string mode);
+
 	//send() replies
 	void setRPL(std::string RPL, std::string str);
 	void sendRPL();

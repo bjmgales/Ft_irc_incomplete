@@ -6,7 +6,7 @@
 /*   By: bgales <bgales@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 21:12:42 by bgales            #+#    #+#             */
-/*   Updated: 2024/02/19 22:15:50 by bgales           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:37:30 by bgales           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ bool isDigit(std::string str){
 		}
 	}
 	return (true);
+}
+
+bool isSet(char c, std::string set){
+	for (int i = 0; i < set.size(); i++){
+		if (c == set[i])
+			return (true);
+	}
+	return (false);
 }
 
 void cleanCarriageRet(std::string *str){

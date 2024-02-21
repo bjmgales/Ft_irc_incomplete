@@ -53,9 +53,6 @@ void	Server::chanTopic(std::string request){
 		_waitUsers.push_back(getUsr());
 }
 
-void	Server::chanMode(std::string request){
-}
-
 void Server::chanMsg(std::string request){
 	std::string dest_chan = request.substr(0, request.find(' ') + 1);
 	std::string msg = request.substr(request.find(":") + 1);
